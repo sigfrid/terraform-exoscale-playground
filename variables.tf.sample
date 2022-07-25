@@ -1,0 +1,12 @@
+variable "exoscale_api_key" {
+  description = "Value of the API key for accessing Exoscale"
+  type        = string
+  default     = "API-KEY"
+}
+
+
+variable "exoscale_api_secret" {
+  description = "Value of the SECRET key for accessing Exoscale"
+  type        = string
+  default     = "SECRET-KEY"
+}
