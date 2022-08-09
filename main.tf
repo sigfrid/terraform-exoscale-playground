@@ -13,22 +13,23 @@ locals {
   default_type     = "standard.micro"
 }
 
-data "exoscale_compute_template" "template-one" {
+data "exoscale_compute_template" "terraform-playground" {
   zone = local.default_zone
   name = local.default_template
 }
 
-resource "exoscale_compute_instance" "instance-one" {
+resource "exoscale_compute_instance" "terraform-playground-instance" {
   zone = local.default_zone
-  name = "instance-one"
+  name = "terraform-playground-instance"
 
-  template_id = data.exoscale_compute_template.template-one.id
+  template_id = data.exoscale_compute_template.terraform-playground.id
   type        = local.default_type
+  ssh_key     = exoscale_ssh_key.terraform-playground-ssh-key.name
   disk_size   = 10
   ipv6        = false
 }
 
-resource "exoscale_ssh_key" "ssh-key-one" {
-  name       = "ssh-key-one"
+resource "exoscale_ssh_key" "terraform-playground-ssh-key" {
+  name       = "terraform-playground-ssh-key"
   public_key = file("ssh_public_keys/exoscale-playground.pub")
 }
