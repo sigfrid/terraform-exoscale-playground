@@ -27,3 +27,8 @@ resource "exoscale_compute_instance" "instance-one" {
   disk_size   = 10
   ipv6        = false
 }
+
+resource "exoscale_ssh_key" "ssh-key-one" {
+  name       = "ssh-key-one"
+  public_key = file("ssh_public_keys/exoscale-playground.pub")
+}
