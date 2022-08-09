@@ -24,12 +24,34 @@ resource "exoscale_compute_instance" "terraform-playground-instance" {
 
   template_id = data.exoscale_compute_template.terraform-playground.id
   type        = local.default_type
-  ssh_key     = exoscale_ssh_key.terraform-playground-ssh-key.name
   disk_size   = 10
   ipv6        = false
+
+  ssh_key     = exoscale_ssh_key.terraform-playground-ssh-key.name
+
+  security_group_ids = [
+    exoscale_security_group.terraform-playground-ssh-security-group.id,
+  ]
 }
 
 resource "exoscale_ssh_key" "terraform-playground-ssh-key" {
   name       = "terraform-playground-ssh-key"
   public_key = file("ssh_public_keys/exoscale-playground.pub")
+}
+
+# You may combine multiple rules in groups
+# Which are assigned to instances
+
+resource "exoscale_security_group" "terraform-playground-ssh-security-group" {
+  name = "terraform-playground-ssh-security-group"
+}
+
+resource "exoscale_security_group_rule" "ssh_ipv4" {
+  security_group_id = exoscale_security_group.terraform-playground-ssh-security-group.id
+  description       = "SSH (IPv4)"
+  type              = "INGRESS"
+  protocol          = "TCP"
+  start_port        = 22
+  end_port          = 22
+  cidr              = "0.0.0.0/0"
 }
