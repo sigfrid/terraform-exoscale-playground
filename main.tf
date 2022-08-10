@@ -31,6 +31,8 @@ resource "exoscale_compute_instance" "terraform-playground-instance" {
   security_group_ids = [
     exoscale_security_group.terraform-playground-ssh-security-group.id,
   ]
+
+  user_data   = file("scripts/docker")
 }
 
 resource "exoscale_ssh_key" "terraform-playground-ssh-key" {

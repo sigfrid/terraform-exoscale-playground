@@ -1,0 +1,31 @@
+#!/bin/sh
+
+ENGINE_VERSION=5:20.10.17~3-0~ubuntu-jammy
+COMPOSE_VERSION=2.6.0~ubuntu-jammy
+
+sudo apt-get update
+
+sudo apt-get install \
+     ca-certificates \
+     curl \
+     gnupg \
+     lsb-release
+
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+     $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+
+sudo apt-get -y install \
+     docker-ce=$ENGINE_VERSION \
+     docker-ce-cli=$ENGINE_VERSION \
+     containerd.io \
+    docker-compose-plugin=$COMPOSE_VERSION
+
+
+# Start on boot
+sudo systemctl enable docker.service
+sudo systemctl enable containerd.service
