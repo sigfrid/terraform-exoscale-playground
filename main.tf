@@ -32,7 +32,27 @@ resource "exoscale_compute_instance" "terraform-playground-instance" {
     exoscale_security_group.terraform-playground-ssh-security-group.id,
   ]
 
-  user_data   = file("scripts/docker")
+
+  provisioner "file" {
+      source      = "scripts/docker"
+      destination = "/tmp/docker"
+    }
+
+    provisioner "remote-exec" {
+      inline = [
+        "chmod +x /tmp/docker",
+        "sudo /tmp/docker",
+      ]
+    }
+
+    # Login to the ec2-user with the aws key.
+    connection {
+      type        = "ssh"
+      user        = "ubuntu"
+      password    = ""
+      private_key = file("/Users/sig/.ssh/exoscale-playground")
+      host        = exoscale_compute_instance.terraform-playground-instance.public_ip_address
+    }
 }
 
 resource "exoscale_ssh_key" "terraform-playground-ssh-key" {
