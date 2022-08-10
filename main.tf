@@ -25,7 +25,6 @@ resource "exoscale_compute_instance" "terraform-playground-instance" {
   template_id = data.exoscale_compute_template.terraform-playground.id
   type        = local.default_type
   disk_size   = 10
-  ipv6        = false
 
   ssh_key     = exoscale_ssh_key.terraform-playground-ssh-key.name
 
