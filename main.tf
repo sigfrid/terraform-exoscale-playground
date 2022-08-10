@@ -54,3 +54,15 @@ resource "exoscale_security_group_rule" "ssh_ipv4" {
   end_port          = 22
   cidr              = "0.0.0.0/0"
 }
+
+
+
+
+
+output "ssh_connection" {
+  value = format(
+    "ssh -i ~/.ssh/exoscale-playground %s@%s",
+    data.exoscale_compute_template.terraform-playground.username,
+    exoscale_compute_instance.terraform-playground-instance.public_ip_address,
+  )
+}
